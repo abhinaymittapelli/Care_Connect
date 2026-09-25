@@ -14,8 +14,8 @@ POST http://localhost:5000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "abhi@gmail.com",
-  "password": "123456"
+  "email": "abhinay@gmail.com",
+  "password": "Test@123"
 
 }
 
@@ -29,3 +29,249 @@ Authorization: Bearer
 
 GET http://localhost:5000/api/users/admin
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDI0MjYyNSwiZXhwIjoxNzkwMzI5MDI1fQ.TKNK_B7yt7MP4LZ4VLn9CxqvB1ksBofKnlCrGuNsgSs
+
+
+### Customer trying to create category
+POST http://localhost:5000/api/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5MDMzMjkwNCwiZXhwIjoxNzkwNDE5MzA0fQ.Rp2qbhwxPxi0JBoq606xr_whb0bFvqWJoRauBrGpOrU
+Content-Type: application/json
+
+{
+  "name": "Home Cleaning",
+  "description": "Professional home cleaning and deep cleaning services"
+}
+
+###
+GET http://localhost:5000/api/categories
+
+### Update Category
+PUT http://localhost:5000/api/categories/6ab6328571de0bb0f041e50a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5MDMyNTY1MCwiZXhwIjoxNzkwNDEyMDUwfQ.yaG-PN-nd_6UgcceN_yOWuvu_lE4xg94in5L9Aq-UL8
+Content-Type: application/json
+
+{
+  "name": "Plumbing Services",
+  "description": "Professional plumbing installation, maintenance and repair services",
+  "isActive": true
+}
+
+###
+
+DELETE http://localhost:5000/api/categories/6ab6328571de0bb0f041e50a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5MDMyNTY1MCwiZXhwIjoxNzkwNDEyMDUwfQ.yaG-PN-nd_6UgcceN_yOWuvu_lE4xg94in5L9Aq-UL8
+
+
+### Register Provider Test User
+POST http://localhost:5000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Provider",
+  "email": "provider@gmail.com",
+  "password": "123456",
+  "phone": "9876543212"
+}
+
+### Create Provider Profile
+POST http://localhost:5000/api/providers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDMzMTAyMSwiZXhwIjoxNzkwNDE3NDIxfQ.W0ZyQjwWac_JTK4hvh-spg4X49OqFi4YFolgcMuNR_8
+Content-Type: application/json
+
+{
+  "businessName": "Rahul Home Services",
+  "bio": "Experienced home service professional providing reliable repair services.",
+  "phone": "9876543212",
+  "address": "Kukatpally",
+  "city": "Hyderabad",
+  "state": "Telangana",
+  "skills": [],
+  "experienceYears": 4,
+  "hourlyRate": 500
+}
+
+###
+GET http://localhost:5000/api/providers
+
+###
+PUT http://localhost:5000/api/providers/6ab648a1095f41037e56da54/verify
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5MDMzMTY4NiwiZXhwIjoxNzkwNDE4MDg2fQ.UnP85bh58FOBIAzHEd0Uxdn9J295ZhOrXiJORZrrBH4
+
+### Assign Provider Skills
+
+PUT http://localhost:5000/api/providers/skills
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDMzMjcwMSwiZXhwIjoxNzkwNDE5MTAxfQ.M5_0RbopGCxi47qgw9126EFHZZj4DAv6Vj3vRcOeZs8
+Content-Type: application/json
+
+{
+  "skills": [
+    "6ab634430c65e576e4295278"
+    
+  ]
+}
+
+### Add Monday Availability
+POST http://localhost:5000/api/availability
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDMzMzM5OSwiZXhwIjoxNzkwNDE5Nzk5fQ._MKtLDSF24o33DIAIhlE4IP5Yl74wEvbD69X6r_US2M
+Content-Type: application/json
+
+{
+  "dayOfWeek": "Thursday",
+  "startTime": "11:00",
+  "endTime": "19:00",
+  "isAvailable": true
+}
+
+### Get My Availability
+GET http://localhost:5000/api/availability
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDMzMzM5OSwiZXhwIjoxNzkwNDE5Nzk5fQ._MKtLDSF24o33DIAIhlE4IP5Yl74wEvbD69X6r_US2M
+
+### Create Service Request
+
+POST http://localhost:5000/api/service-requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDMzMzk1MSwiZXhwIjoxNzkwNDIwMzUxfQ.qp4t1OmpPHZDnPjG-j6hIJUXPsO_xLm5gkbdhvJRBGQ
+Content-Type: application/json
+
+{
+  "category": "6ab634430c65e576e4295278",
+  "title": "Kitchen sink leakage",
+  "description": "Water is continuously leaking from the kitchen sink and needs repair.",
+  "address": "Kukatpally, Hyderabad",
+  "city": "Hyderabad",
+  "preferredDate": "2026-09-28",
+  "preferredTime": "10:00",
+  "estimatedBudget": 1000
+}
+
+### Get My Service Requests
+
+GET http://localhost:5000/api/service-requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDMzMzk1MSwiZXhwIjoxNzkwNDIwMzUxfQ.qp4t1OmpPHZDnPjG-j6hIJUXPsO_xLm5gkbdhvJRBGQ
+
+### Find Matching Providers
+
+GET http://localhost:5000/api/matching/6ab6542136a1e5f3c66ea9bb
+Authorization: Bearer 
+
+###
+
+POST http://localhost:5000/api/quotations
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDM1NjY3OCwiZXhwIjoxNzkwNDQzMDc4fQ.ZGOR49Y3-WVa6RgZwPw5gkFFyy9JLkRaYPH5LlAyuYw
+Content-Type: application/json
+
+{
+   "serviceRequest": "6ab6542136a1e5f3c66ea9bb",
+  "amount": 800,
+  "message": "I can complete the service professionally with all required materials.",
+  "estimatedDuration": 2
+}
+
+###
+GET http://localhost:5000/api/quotations/request/6ab6542136a1e5f3c66ea9bb
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM1NjgzOSwiZXhwIjoxNzkwNDQzMjM5fQ.3yNdC4rBZnnhGpE07jffYwdpl4meFKlQJqiZrl6jwKA
+
+
+###
+PUT http://localhost:5000/api/quotations/6ab6acdd05641b7f8a95469d/accept
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM1NjgzOSwiZXhwIjoxNzkwNDQzMjM5fQ.3yNdC4rBZnnhGpE07jffYwdpl4meFKlQJqiZrl6jwKA
+
+###
+POST http://localhost:5000/api/bookings
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM1NzY4NywiZXhwIjoxNzkwNDQ0MDg3fQ.3AQQYKamYyJpp_HqLE2Smutqf11ZJ0oIuR_7uZbFZ-4
+Content-Type: application/json
+
+{
+  "quotationId": "6ab6acdd05641b7f8a95469d",
+  "scheduledDate": "2026-09-28",
+  "startTime": "10:00",
+  "endTime": "12:00",
+  "notes": "Please call me before arriving."
+}
+
+###
+GET http://localhost:5000/api/bookings/my
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM1NzgxOCwiZXhwIjoxNzkwNDQ0MjE4fQ.J-WeIW56ASwKID_lnwoszNspG3nKRz9RoqbUobJuPTM
+
+###
+GET http://localhost:5000/api/bookings/provider
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDM1OTUwNCwiZXhwIjoxNzkwNDQ1OTA0fQ.-2OAA0DPXpHV2CfrLNYJe0ZJndhrQ2N4XYjcWE43FQM
+###
+
+PUT http://localhost:5000/api/bookings/6ab6b0d75a80d13e5c4d5fb8/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDM1ODQwMiwiZXhwIjoxNzkwNDQ0ODAyfQ.ybEs-zlsl0GWJMf8rxFwYqORlHxHIBqtT-zyRyH5xRU
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+###
+POST http://localhost:5000/api/job-evidence
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjY0ODQwMDk1ZjQxMDM3ZTU2ZGE1MyIsInJvbGUiOiJwcm92aWRlciIsImlhdCI6MTc5MDM1OTczNSwiZXhwIjoxNzkwNDQ2MTM1fQ.aywLuiRN5nj774t7446Hy98AHqnJxyToG12r4P9yWmo
+Content-Type: application/json
+
+{
+  "bookingId": "6ab6b0d75a80d13e5c4d5fb8",
+  "beforeImages": [
+    "https://example.com/kitchen-before.jpg"
+  ],
+  "afterImages": [
+    "https://example.com/kitchen-after.jpg"
+  ],
+  "completionNotes": "Kitchen sink leakage was repaired successfully. All connections were checked after the repair."
+}
+
+###
+GET http://localhost:5000/api/job-evidence/6ab6b0d75a80d13e5c4d5fb8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM1OTg0NywiZXhwIjoxNzkwNDQ2MjQ3fQ.9YEtwwzssg-nqEjCGDfo0dqLosBqB-9Whxnn1pLmGR4
+
+###
+POST http://localhost:5000/api/reviews
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+Content-Type: application/json
+
+{
+  "bookingId": "6ab6b0d75a80d13e5c4d5fb8",
+  "rating": 5,
+  "comment": "Excellent service. The issue was fixed professionally and quickly."
+}
+
+###
+POST http://localhost:5000/api/invoices
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+Content-Type: application/json
+
+{
+  "bookingId": "6ab6b0d75a80d13e5c4d5fb8",
+  "taxAmount": 0,
+  "discountAmount": 0,
+  "paymentMethod": "upi",
+  "notes": "Payment for completed kitchen sink repair service."
+}
+
+###
+GET http://localhost:5000/api/invoices/my
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+
+###
+GET http://localhost:5000/api/invoices/6ab6bd143fb2acf0d4aea3fe
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+
+###
+PUT http://localhost:5000/api/invoices/6ab6bd143fb2acf0d4aea3fe/pay
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+
+###
+POST http://localhost:5000/api/payments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+Content-Type: application/json
+
+{
+  "invoiceId": "6ab6bd143fb2acf0d4aea3fe",
+  "paymentMethod": "upi",
+  "transactionId": "CC-TXN-001",
+  "notes": "Payment for completed kitchen sink repair service."
+}
+
+###
+GET http://localhost:5000/api/payments/6ab6c3c21059626db09ed876
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
