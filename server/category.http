@@ -1,0 +1,14 @@
+###
+### Get All Categories
+GET http://localhost:5000/api/categories
+
+###
+### Customer trying to create category
+POST http://localhost:5000/api/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDI0NDg0MiwiZXhwIjoxNzkwMzMxMjQyfQ.xCNHgRZ6BNMt8p9xCeANYeLg9rfWx1DRb7vI5iTppRI
+Content-Type: application/json
+
+{
+  "name": "Plumbing",
+  "description": "Professional plumbing installation and repair services"
+}

@@ -1,0 +1,31 @@
+POST http://localhost:5000/api/users/register
+Content-Type: application/json
+
+{
+    "name": "Abhinay",
+  "email": "abhi@gmail.com",
+  "password": "123456",
+  "phone": "9876543210"
+}
+
+###
+
+POST http://localhost:5000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "abhi@gmail.com",
+  "password": "123456"
+
+}
+
+
+###
+
+GET http://localhost:5000/api/users/profile
+Authorization: Bearer
+
+###
+
+GET http://localhost:5000/api/users/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRlNTQ1NmEzNDljMGMzNGM5MGQ0ZCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDI0MjYyNSwiZXhwIjoxNzkwMzI5MDI1fQ.TKNK_B7yt7MP4LZ4VLn9CxqvB1ksBofKnlCrGuNsgSs
