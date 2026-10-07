@@ -2,6 +2,8 @@ const Booking = require("../models/Booking");
 const Quotation = require("../models/Quotation");
 const ServiceRequest = require("../models/ServiceRequest");
 const Provider = require("../models/Provider");
+const createNotification = require("../utils/notificationService");
+const User = require("../models/User");
 
 // Create booking from accepted quotation
 const createBooking = async (req, res) => {
@@ -482,6 +484,42 @@ const updateBookingStatus = async (req, res) => {
     booking.status = status;
 
     await booking.save();
+
+    // Send notification when booking is confirmed
+if (status === "confirmed") {
+  const customer = await User.findById(
+    booking.customer
+  );
+
+  if (customer) {
+    await createNotification({
+      recipientId: customer._id,
+      email: customer.email,
+      type: "booking",
+      title: "Booking Confirmed",
+      message: `Your booking has been confirmed. Your service is scheduled for ${booking.startTime} to ${booking.endTime}.`,
+      relatedId: booking._id,
+    });
+  }
+}
+
+// Notify customer when booking is completed
+if (status === "completed") {
+  const customer = await User.findById(
+    booking.customer
+  );
+
+  if (customer) {
+    await createNotification({
+      recipientId: customer._id,
+      email: customer.email,
+      type: "job",
+      title: "Service Completed",
+      message: `Your service booking has been completed successfully. Thank you for using CareConnect.`,
+      relatedId: booking._id,
+    });
+  }
+}
 
     // Keep service request status synchronized
     let requestStatus;

@@ -1,7 +1,8 @@
 const Quotation = require("../models/Quotation");
 const ServiceRequest = require("../models/ServiceRequest");
 const Provider = require("../models/Provider");
-
+const createNotification = require("../utils/notificationService");
+const User = require("../models/User");
 // Provider submits quotation
 const createQuotation = async (req, res) => {
   try {
@@ -264,6 +265,28 @@ const acceptQuotation = async (req, res) => {
         },
       }
     );
+
+    // Notify provider when customer accepts quotation
+const provider = await Provider.findById(
+  quotation.provider
+);
+
+if (provider) {
+  const providerUser = await User.findById(
+    provider.user
+  );
+
+  if (providerUser) {
+    await createNotification({
+      recipientId: providerUser._id,
+      email: providerUser.email,
+      type: "quotation",
+      title: "Quotation Accepted",
+      message: `Your quotation of ₹${quotation.amount} has been accepted by the customer.`,
+      relatedId: quotation._id,
+    });
+  }
+}
 
     const updatedQuotation =
       await Quotation.findById(quotation._id)
