@@ -145,9 +145,7 @@ Content-Type: application/json
 ### Get My Service Requests
 
 GET http://localhost:5000/api/service-requests
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDMzMzk1MSwiZXhwIjoxNzkwNDIwMzUxfQ.qp4t1OmpPHZDnPjG-j6hIJUXPsO_xLm5gkbdhvJRBGQ
-
-### Find Matching Providers
+Authorization: Bearer ching Providers
 
 GET http://localhost:5000/api/matching/6ab6542136a1e5f3c66ea9bb
 Authorization: Bearer 
@@ -274,4 +272,15 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5000/api/payments/6ab6c3c21059626db09ed876
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjRkYjAyNTFhYTZkZTg4YTYzN2M4NiIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5MDM2MDMyNywiZXhwIjoxNzkwNDQ2NzI3fQ.Ro9JIbq819Bhe3BT1N5udQJjhiwI6yROpzRAi0obOTE
+Authorization: Bearer
+
+###
+GET http://localhost:5000/api/notifications/my
+Authorization: Bearer
+
+###
+GET http://localhost:5000/api/notifications/unread
+Authorization: Bearer 
+###
+POST http://localhost:5000/api/notifications/test
+Authorization: Bearer 

@@ -207,10 +207,64 @@ const cancelServiceRequest = async (req, res) => {
   }
 };
 
+export const getProviderRequests = async (req, res) => {
+  try {
+    const Provider = (await import("../models/Provider.js")).default;
+
+    const provider = await Provider.findOne({
+      user: req.user.id,
+      isVerified: true,
+      isAvailable: true,
+    }).populate("skills");
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "Provider profile not found or not verified.",
+      });
+    }
+
+    const skillIds = provider.skills.map(
+      (skill) => skill._id
+    );
+
+    const requests = await ServiceRequest.find({
+      status: {
+        $in: ["pending", "matched"],
+      },
+      category: {
+        $in: skillIds,
+      },
+      city: {
+        $regex: new RegExp(`^${provider.city}$`, "i"),
+      },
+    })
+      .populate("category", "name description")
+      .populate(
+        "customer",
+        "name email phone"
+      )
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      requests,
+    });
+  } catch (error) {
+    console.error(
+      "Get provider requests error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Unable to load provider requests.",
+    });
+  }
+};
+
 
 module.exports = {
   createServiceRequest,
   getMyServiceRequests,
   getServiceRequestById,
   cancelServiceRequest,
+  getProviderRequests,
 };

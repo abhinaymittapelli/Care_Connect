@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 // Register User
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone , role} = req.body;
 
     // Check required fields
     if (!name || !email || !password || !phone) {
@@ -32,6 +32,7 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       phone,
+      role: role || "customer", // Default role is 'customer'
     });
 
     // Send response without password

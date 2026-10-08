@@ -1,3 +1,10 @@
+import express from "express";
+import {
+  getProviderRequests,
+} from "../controllers/serviceRequestController.js";
+
+import { protect } from "../middleware/authMiddleware.js";
+import { authorizeRoles } from "../middleware/roleMiddleware.js";
 const express = require("express");
 
 const {
@@ -28,6 +35,13 @@ router.get(
   getMyServiceRequests
 );
 
+router.get(
+  "/provider/available",
+  protect,
+  authorizeRoles("provider"),
+  getProviderRequests
+);
+
 // Customer gets one request
 router.get(
   "/:id",
@@ -36,9 +50,12 @@ router.get(
   getServiceRequestById
 );
 
+
+
 // Customer cancels their request
 router.put(
   "/:id/cancel",
+  
   protect,
   authorizeRoles("customer"),
   cancelServiceRequest
