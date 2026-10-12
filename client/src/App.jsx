@@ -89,9 +89,9 @@ function App() {
           element={<ServiceRequest />}
         />
         <Route
-  path="/provider-profile"
-  element={<ProviderProfile />}
-/>
+          path="/provider-profile"
+          element={<ProviderProfile />}
+          />
 
         {/* Unknown URL */}
         <Route
