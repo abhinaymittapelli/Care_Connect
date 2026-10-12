@@ -1,5 +1,6 @@
 const ServiceRequest = require("../models/ServiceRequest");
 const ServiceCategory = require("../models/ServiceCategory");
+const Provider = require("../models/Provider");
 
 // Create Service Request
 const createServiceRequest = async (req, res) => {
@@ -207,9 +208,8 @@ const cancelServiceRequest = async (req, res) => {
   }
 };
 
-export const getProviderRequests = async (req, res) => {
+const getProviderRequests = async (req, res) => {
   try {
-    const Provider = (await import("../models/Provider.js")).default;
 
     const provider = await Provider.findOne({
       user: req.user.id,

@@ -1,10 +1,4 @@
-import express from "express";
-import {
-  getProviderRequests,
-} from "../controllers/serviceRequestController.js";
 
-import { protect } from "../middleware/authMiddleware.js";
-import { authorizeRoles } from "../middleware/roleMiddleware.js";
 const express = require("express");
 
 const {
@@ -12,12 +6,21 @@ const {
   getMyServiceRequests,
   getServiceRequestById,
   cancelServiceRequest,
+  getProviderRequests,
 } = require("../controllers/serviceRequestController");
 
 const protect = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
 
 const router = express.Router();
+
+// Provider route must be before /:id
+router.get(
+  "/provider/available",
+  protect,
+  authorizeRoles("provider"),
+  getProviderRequests
+);
 
 // Customer creates a service request
 router.post(
@@ -35,13 +38,6 @@ router.get(
   getMyServiceRequests
 );
 
-router.get(
-  "/provider/available",
-  protect,
-  authorizeRoles("provider"),
-  getProviderRequests
-);
-
 // Customer gets one request
 router.get(
   "/:id",
@@ -50,12 +46,9 @@ router.get(
   getServiceRequestById
 );
 
-
-
 // Customer cancels their request
 router.put(
   "/:id/cancel",
-  
   protect,
   authorizeRoles("customer"),
   cancelServiceRequest
