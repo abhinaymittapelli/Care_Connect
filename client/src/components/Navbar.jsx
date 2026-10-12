@@ -56,7 +56,15 @@ function Navbar() {
     <>
       {/* Profile */}
       <button
-        onClick={() => navigate("/dashboard")}
+        onClick={() => {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  if (user?.role === "provider") {
+    navigate("/provider-profile");
+  } else {
+    navigate("/dashboard");
+  }
+}}
         className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-800 transition hover:bg-gray-50"
       >
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">
