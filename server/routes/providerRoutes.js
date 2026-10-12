@@ -1,3 +1,4 @@
+
 const express = require("express");
 
 const {
@@ -15,10 +16,10 @@ const authorizeRoles = require("../middleware/roleMiddleware");
 
 const router = express.Router();
 
-// Anyone can view providers
+// Anyone can view all providers
 router.get("/", getProviders);
 
-
+// Providers can update their service skills
 router.put(
   "/skills",
   protect,
@@ -26,17 +27,18 @@ router.put(
   updateProviderSkills
 );
 
+// Anyone can view a provider by ID
 router.get("/:id", getProviderById);
 
-// Only customers can create a provider profile
+// Providers can create their own profile
 router.post(
   "/",
   protect,
-  authorizeRoles("customer"),
+  authorizeRoles("provider"),
   createProvider
 );
 
-// Only providers can update their own profile
+// Providers can update their own profile
 router.put(
   "/",
   protect,
@@ -44,7 +46,7 @@ router.put(
   updateProvider
 );
 
-// Only providers can delete their own profile
+// Providers can delete their own profile
 router.delete(
   "/",
   protect,
@@ -52,6 +54,7 @@ router.delete(
   deleteProvider
 );
 
+// Only admins can verify providers
 router.put(
   "/:id/verify",
   protect,
@@ -59,6 +62,6 @@ router.put(
   verifyProvider
 );
 
-
 console.log("Provider routes loaded");
+
 module.exports = router;
