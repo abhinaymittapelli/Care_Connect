@@ -29,7 +29,10 @@ function RequestDetails() {
 
       const response = await api.get(`/service-requests/${id}`);
 
-      const requestData = response.data.request || response.data;
+      const requestData =
+        response.data.serviceRequest ||
+        response.data.request ||
+        response.data;
 
       setRequest(requestData);
 

@@ -57,13 +57,31 @@ function Navbar() {
         </div>
 
         {/* Right side */}
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {token && user ? (
             <>
+              {user.role === "provider" && (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className="rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-100 sm:text-sm"
+                >
+                  Jobs Dashboard
+                </button>
+              )}
+
+              {user.role === "customer" && (
+                <button
+                  onClick={() => navigate("/my-requests")}
+                  className="rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-100 sm:text-sm"
+                >
+                  My Requests
+                </button>
+              )}
+
               {/* Profile */}
               <button
                 onClick={handleProfileClick}
-                className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-800 transition hover:bg-gray-50"
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-800 transition hover:bg-gray-50 sm:px-4 sm:py-2.5 sm:text-sm"
               >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">
                   {user.name?.charAt(0).toUpperCase()}
@@ -76,7 +94,7 @@ function Navbar() {
               {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+                className="rounded-lg px-3 py-2 text-xs font-medium text-gray-700 transition hover:bg-gray-100 sm:px-4 sm:py-2.5 sm:text-sm"
               >
                 Logout
               </button>

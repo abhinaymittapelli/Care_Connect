@@ -103,8 +103,9 @@ function Booking() {
       setBooking(true);
 
       await api.post("/bookings", {
-        serviceRequest: requestId,
+        quotationId: quotationId,
         quotation: quotationId,
+        serviceRequest: requestId,
         scheduledDate: form.scheduledDate,
         startTime: form.startTime,
         endTime: form.endTime,

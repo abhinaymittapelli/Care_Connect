@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import CategoryCard from "../components/CategoryCard";
 import ServiceSection from "../components/ServiceSection";
@@ -76,17 +78,30 @@ const popularServices = [
 ];
 
 function Home() {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleServiceClick = (serviceName) => {
+    navigate("/service-request", { state: { categoryName: serviceName } });
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      handleServiceClick(searchTerm.trim());
+    } else {
+      navigate("/service-request");
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-white">
-
       <Navbar />
 
       {/* HERO */}
       <section className="bg-[#f7f7f7]">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-14 md:grid-cols-2 md:px-8 md:py-20">
-
           <div className="max-w-xl">
-
             <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-blue-600">
               CareConnect Home Services
             </p>
@@ -98,29 +113,29 @@ function Home() {
             </h1>
 
             <p className="mt-5 max-w-lg text-base leading-7 text-gray-600 md:text-lg">
-              Book trusted professionals for cleaning,
-              repairs, maintenance and other home services.
+              Book trusted professionals for cleaning, repairs, maintenance and other home services.
             </p>
 
             {/* SEARCH */}
-            <div className="mt-8 flex w-full items-center rounded-xl border border-gray-300 bg-white p-1.5 shadow-sm">
-
-              <span className="px-3 text-lg text-gray-400">
-                🔍
-              </span>
-
+            <form
+              onSubmit={handleSearchSubmit}
+              className="mt-8 flex w-full items-center rounded-xl border border-gray-300 bg-white p-1.5 shadow-sm"
+            >
+              <span className="px-3 text-lg text-gray-400">🔍</span>
               <input
                 type="text"
-                placeholder="Search for a service"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search for a service (e.g. cleaning, plumber)"
                 className="min-w-0 flex-1 bg-transparent px-2 py-3 text-sm outline-none placeholder:text-gray-400"
               />
-
-              <button className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+              <button
+                type="submit"
+                className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
                 Search
               </button>
-
-            </div>
-
+            </form>
           </div>
 
           {/* HERO IMAGE */}
@@ -131,21 +146,17 @@ function Home() {
               className="h-[320px] w-full object-cover md:h-[400px]"
             />
           </div>
-
         </div>
       </section>
 
       {/* MAIN */}
-      <main className="mx-auto max-w-7xl px-6 md:px-8">
-
+      <main id="services" className="mx-auto max-w-7xl px-6 md:px-8">
         {/* POPULAR SERVICES */}
         <section className="py-12">
-
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
               Popular services
             </h2>
-
             <p className="mt-1 text-sm text-gray-500">
               Services people book most often
             </p>
@@ -159,20 +170,18 @@ function Home() {
                   name: service.name,
                   image: service.image,
                 }}
+                onClick={() => handleServiceClick(service.name)}
               />
             ))}
           </div>
-
         </section>
 
         {/* CATEGORIES */}
         <section className="border-t border-gray-100 py-12">
-
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
               Browse all services
             </h2>
-
             <p className="mt-1 text-sm text-gray-500">
               Find the right professional for your home
             </p>
@@ -183,59 +192,53 @@ function Home() {
               <CategoryCard
                 key={category.name}
                 category={category}
+                onClick={() => handleServiceClick(category.name)}
               />
             ))}
           </div>
-
         </section>
 
         {/* PROMO BANNER */}
         <section className="my-4 overflow-hidden rounded-2xl bg-blue-600">
-
           <div className="flex flex-col items-start justify-between gap-8 px-8 py-10 md:flex-row md:items-center md:px-12">
-
             <div className="max-w-2xl text-white">
-
               <p className="text-sm font-semibold uppercase tracking-wider text-blue-100">
                 CARECONNECT
               </p>
-
               <h2 className="mt-2 text-2xl font-bold md:text-3xl">
                 Trusted professionals.
                 <br />
                 Quality service at your doorstep.
               </h2>
-
               <p className="mt-3 text-sm leading-6 text-blue-100 md:text-base">
-                Easy booking, transparent quotations and
-                reliable service professionals.
+                Easy booking, transparent quotations and reliable service professionals.
               </p>
-
             </div>
 
-            <button className="shrink-0 rounded-lg bg-white px-7 py-3 text-sm font-semibold text-blue-600 transition hover:bg-gray-100">
+            <button
+              onClick={() => navigate("/service-request")}
+              className="shrink-0 rounded-lg bg-white px-7 py-3 text-sm font-semibold text-blue-600 transition hover:bg-gray-100"
+            >
               Explore Services
             </button>
-
           </div>
-
         </section>
 
         {/* SERVICE SECTIONS */}
         <ServiceSection
           title="New and noteworthy"
           services={popularServices}
+          onBook={(srv) => handleServiceClick(srv.name)}
         />
 
         <ServiceSection
           title="Most booked services"
           services={[...popularServices].reverse()}
+          onBook={(srv) => handleServiceClick(srv.name)}
         />
-
       </main>
 
       <Footer />
-
     </div>
   );
 }

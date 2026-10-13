@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 
 function ServiceRequest() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [categories, setCategories] = useState([]);
 
@@ -27,11 +28,26 @@ function ServiceRequest() {
     const fetchCategories = async () => {
       try {
         const response = await api.get("/categories");
+        const list = response.data.categories || response.data || [];
+        setCategories(list);
 
-        setCategories(response.data.categories || response.data);
-      } catch (error) {
+        const targetCatName = location.state?.categoryName?.toLowerCase();
+        if (targetCatName && Array.isArray(list)) {
+          const match = list.find((c) =>
+            c.name.toLowerCase().includes(targetCatName) ||
+            targetCatName.includes(c.name.toLowerCase())
+          );
+          if (match) {
+            setForm((prev) => ({
+              ...prev,
+              category: match._id,
+              title: prev.title || `${match.name} Request`,
+            }));
+          }
+        }
+      } catch (err) {
         setError(
-          error.response?.data?.message ||
+          err.response?.data?.message ||
             "Unable to load service categories."
         );
       } finally {
@@ -40,7 +56,7 @@ function ServiceRequest() {
     };
 
     fetchCategories();
-  }, []);
+  }, [location.state]);
 
   const handleChange = (e) => {
     setForm({

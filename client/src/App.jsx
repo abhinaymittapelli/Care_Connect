@@ -55,62 +55,90 @@ function Dashboard() {
   );
 }
 
+function ProtectedRoute({ children, role }) {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (role && user.role !== role) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Home */}
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Route path="/" element={<Home />} />
 
         {/* Authentication */}
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* Dashboard */}
         <Route
           path="/dashboard"
-          element={<Dashboard />}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
         />
 
         {/* Customer service request */}
         <Route
           path="/service-request"
-          element={<ServiceRequest />}
+          element={
+            <ProtectedRoute>
+              <ServiceRequest />
+            </ProtectedRoute>
+          }
         />
-        <Route
-          path="/provider-profile"
-          element={<ProviderProfile />}
-          />
 
-        {/* Unknown URL */}
-        <Route
-          path="*"
-          element={<Navigate to="/" replace />}
-        />
+        {/* Customer requests and booking */}
         <Route
           path="/my-requests"
-          element={<MyRequests />}
-          />
-          <Route
-  path="/booking/:requestId/:quotationId"
-  element={<Booking />}
-/>
-          <Route
-           path="/requests/:id"
-           element={<RequestDetails />}
-/>
+          element={
+            <ProtectedRoute>
+              <MyRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/requests/:id"
+          element={
+            <ProtectedRoute>
+              <RequestDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/booking/:requestId/:quotationId"
+          element={
+            <ProtectedRoute>
+              <Booking />
+            </ProtectedRoute>
+          }
+        />
 
+        {/* Provider profile */}
+        <Route
+          path="/provider-profile"
+          element={
+            <ProtectedRoute>
+              <ProviderProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Unknown URL - fallback catch-all */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

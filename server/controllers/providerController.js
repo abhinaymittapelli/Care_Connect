@@ -1,5 +1,6 @@
 const Provider = require("../models/Provider");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 // Create Provider Profile
 const createProvider = async (req, res) => {
@@ -52,25 +53,42 @@ const createProvider = async (req, res) => {
     }
 
     const provider = await Provider.create({
-      user: req.user.id,
-      businessName,
-      bio,
-      phone,
-      address,
-      city,
-      state,
-      skills: skills || [],
-      experienceYears,
-      hourlyRate,
-    });
+  user: req.user.id,
+  businessName,
+  bio,
+  phone,
+  address,
+  city,
+  state,
+  experienceYears,
+  hourlyRate,
+  skills,
+  isVerified: false,
+  isAvailable: true,
+});
 
     // Change user role to provider
     user.role = "provider";
     await user.save();
 
+    // Generate fresh token with provider role
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.status(201).json({
       message: "Provider profile created successfully",
       provider,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.error("Create Provider Error:", error.message);
@@ -316,10 +334,38 @@ const updateProviderSkills = async (req, res) => {
 };
 
 
+// Get Current Provider Profile
+const getCurrentProviderProfile = async (req, res) => {
+  try {
+    const provider = await Provider.findOne({
+      user: req.user.id,
+    })
+      .populate("user", "name email phone")
+      .populate("skills", "name description");
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "Provider profile not found",
+      });
+    }
+
+    res.status(200).json({
+      provider,
+    });
+  } catch (error) {
+    console.error("Get Current Provider Error:", error.message);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+
 module.exports = {
   createProvider,
   getProviders,
   getProviderById,
+  getCurrentProviderProfile,
   updateProvider,
   deleteProvider,
   verifyProvider,

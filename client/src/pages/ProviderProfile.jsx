@@ -21,32 +21,64 @@ function ProviderProfile() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [loadingCategories, setLoadingCategories] =
-    useState(true);
-
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [existingProfile, setExistingProfile] = useState(null);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchCategories();
+    fetchExistingProfile();
   }, []);
 
   const fetchCategories = async () => {
     try {
       const response = await api.get("/categories");
-
       setCategories(
         response.data.categories ||
           response.data ||
           []
       );
-    } catch (error) {
-      console.error(error);
-
-      setError(
-        "Unable to load available services."
-      );
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load available services.");
     } finally {
       setLoadingCategories(false);
+    }
+  };
+
+  const fetchExistingProfile = async () => {
+    try {
+      setLoadingProfile(true);
+      const response = await api.get("/providers/me");
+      const p = response.data.provider;
+      if (p) {
+        setIsEditing(true);
+        setExistingProfile(p);
+        setForm({
+          businessName: p.businessName || "",
+          bio: p.bio || "",
+          phone: p.phone || "",
+          address: p.address || "",
+          city: p.city || "Hyderabad",
+          state: p.state || "Telangana",
+          experienceYears: p.experienceYears ?? "",
+          hourlyRate: p.hourlyRate ?? "",
+          skills: Array.isArray(p.skills)
+            ? p.skills.map((s) => (typeof s === "object" ? s._id : s))
+            : [],
+        });
+      }
+    } catch (err) {
+      // 404 is normal if provider has not created a profile yet
+      if (err.response?.status !== 404) {
+        console.error("Fetch profile error:", err);
+      }
+      setIsEditing(false);
+    } finally {
+      setLoadingProfile(false);
     }
   };
 
@@ -59,32 +91,24 @@ function ProviderProfile() {
 
   const handleSkillChange = (categoryId) => {
     setForm((prev) => {
-      const alreadySelected =
-        prev.skills.includes(categoryId);
-
+      const alreadySelected = prev.skills.includes(categoryId);
       if (alreadySelected) {
         return {
           ...prev,
-          skills: prev.skills.filter(
-            (id) => id !== categoryId
-          ),
+          skills: prev.skills.filter((id) => id !== categoryId),
         };
       }
-
       return {
         ...prev,
-        skills: [
-          ...prev.skills,
-          categoryId,
-        ],
+        skills: [...prev.skills, categoryId],
       };
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
+    setSuccess("");
 
     if (!form.businessName.trim()) {
       setError("Business name is required.");
@@ -92,49 +116,47 @@ function ProviderProfile() {
     }
 
     if (form.skills.length === 0) {
-      setError(
-        "Please select at least one service."
-      );
+      setError("Please select at least one service.");
       return;
     }
+
+    const payload = {
+      businessName: form.businessName.trim(),
+      bio: form.bio.trim(),
+      phone: form.phone,
+      address: form.address.trim(),
+      city: form.city,
+      state: form.state,
+      experienceYears: Number(form.experienceYears) || 0,
+      hourlyRate: Number(form.hourlyRate) || 0,
+      skills: form.skills,
+    };
 
     try {
       setLoading(true);
 
-      await api.post("/providers", {
-        businessName:
-          form.businessName.trim(),
-
-        bio: form.bio.trim(),
-
-        phone: form.phone,
-
-        address: form.address.trim(),
-
-        city: form.city,
-
-        state: form.state,
-
-        experienceYears:
-          Number(form.experienceYears) || 0,
-
-        hourlyRate:
-          Number(form.hourlyRate) || 0,
-
-        skills: form.skills,
-      });
-
-      alert(
-        "Provider profile created successfully!"
-      );
-
-      navigate("/dashboard");
-    } catch (error) {
-      console.error(error);
-
+      if (isEditing) {
+        const response = await api.put("/providers", payload);
+        if (response.data.provider) {
+          setExistingProfile(response.data.provider);
+        }
+        setSuccess("Profile updated successfully!");
+      } else {
+        const response = await api.post("/providers", payload);
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+        }
+        if (response.data.user) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+        }
+        alert("Provider profile created successfully!");
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error(err);
       setError(
-        error.response?.data?.message ||
-          "Unable to create provider profile."
+        err.response?.data?.message ||
+          "Unable to save provider profile."
       );
     } finally {
       setLoading(false);
@@ -147,24 +169,55 @@ function ProviderProfile() {
       <Navbar />
 
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard")}
+              className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+            >
+              ← Back to Dashboard
+            </button>
+            <p className="text-sm font-semibold text-blue-600">
+              Provider Account
+            </p>
+            <h1 className="mt-1 text-3xl font-bold text-gray-900">
+              {isEditing ? "Manage Your Provider Profile" : "Create Your Professional Profile"}
+            </h1>
+            <p className="mt-2 text-gray-500">
+              {isEditing
+                ? "Update your business details, pricing, and service offerings."
+                : "Tell customers about your services and experience."}
+            </p>
+          </div>
 
-        <div className="mb-8">
-          <p className="text-sm font-semibold text-blue-600">
-            Provider Registration
-          </p>
-
-          <h1 className="mt-1 text-3xl font-bold text-gray-900">
-            Create your professional profile
-          </h1>
-
-          <p className="mt-2 text-gray-500">
-            Tell customers about your services and experience.
-          </p>
+          {existingProfile && (
+            <div className="flex flex-col items-end gap-2">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold ${
+                  existingProfile.isVerified
+                    ? "bg-green-100 text-green-800"
+                    : "bg-amber-100 text-amber-800"
+                }`}
+              >
+                {existingProfile.isVerified ? "✓ Verified Provider" : "⏳ Pending Admin Verification"}
+              </span>
+              <span className="text-xs text-gray-500">
+                Status: {existingProfile.isAvailable ? "🟢 Available for bookings" : "⚪ Busy / Unavailable"}
+              </span>
+            </div>
+          )}
         </div>
 
         {error && (
           <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {success}
           </div>
         )}
 
@@ -402,7 +455,11 @@ function ProviderProfile() {
             className="mt-8 w-full rounded-xl bg-blue-600 px-6 py-4 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading
-              ? "Creating profile..."
+              ? isEditing
+                ? "Saving changes..."
+                : "Creating profile..."
+              : isEditing
+              ? "Save Profile Changes"
               : "Create Provider Profile"}
           </button>
 

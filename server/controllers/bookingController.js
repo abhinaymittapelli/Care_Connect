@@ -8,8 +8,8 @@ const User = require("../models/User");
 // Create booking from accepted quotation
 const createBooking = async (req, res) => {
   try {
+    const quotationId = req.body.quotationId || req.body.quotation;
     const {
-      quotationId,
       scheduledDate,
       startTime,
       endTime,
@@ -307,8 +307,10 @@ const getBookingById = async (req, res) => {
     }
 
     // Provider can view their booking
+    const provider = await Provider.findOne({ user: req.user.id });
     if (
-      booking.provider._id.toString() === req.user.id
+      provider &&
+      booking.provider._id.toString() === provider._id.toString()
     ) {
       return res.status(200).json({
         booking,

@@ -1,6 +1,6 @@
 import ServiceCard from "./ServiceCard";
 
-function ServiceSection({ title, services }) {
+function ServiceSection({ title, services, onBook }) {
   return (
     <section className="py-10">
 
@@ -8,10 +8,6 @@ function ServiceSection({ title, services }) {
         <h2 className="text-2xl font-bold text-gray-900">
           {title}
         </h2>
-
-        <button className="text-sm font-semibold text-blue-600 hover:underline">
-          See all
-        </button>
       </div>
 
       <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
@@ -19,6 +15,7 @@ function ServiceSection({ title, services }) {
           <ServiceCard
             key={service.id}
             service={service}
+            onBook={onBook}
           />
         ))}
       </div>

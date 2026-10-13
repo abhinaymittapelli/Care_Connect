@@ -5,6 +5,7 @@ const {
   createProvider,
   getProviders,
   getProviderById,
+  getCurrentProviderProfile,
   updateProvider,
   deleteProvider,
   verifyProvider,
@@ -27,14 +28,22 @@ router.put(
   updateProviderSkills
 );
 
+// Provider gets their own profile
+router.get(
+  "/me",
+  protect,
+  authorizeRoles("provider"),
+  getCurrentProviderProfile
+);
+
 // Anyone can view a provider by ID
 router.get("/:id", getProviderById);
 
-// Providers can create their own profile
+// Providers or customers can create a provider profile
 router.post(
   "/",
   protect,
-  authorizeRoles("provider"),
+  authorizeRoles("provider", "customer"),
   createProvider
 );
 
